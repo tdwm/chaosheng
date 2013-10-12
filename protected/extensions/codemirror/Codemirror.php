@@ -5,6 +5,29 @@
  * @author Marcus Vinicius Ostrufka Freire
  * @version 1.0
  * @copyright (c) 2013-03-07, Marcus Freire
+    $this->widget('ext.codemirror.Codemirror',array(
+        'id'=>'crawlerContent',
+        'name'=>'crawlerContent',
+        'value'=>$crawlerContent,
+        //'showTheme' => true,
+        'options'=>array(
+            'lineNumbers'=> true,
+            'matchBrackets'=> true,
+            'showCursorWhenSelecting'=> true,
+            'mode'=> 'text/x-php',
+            'keyMap'=>'vim',
+            'vimMode'=> true,
+            'theme'=>'solarized dark',
+            'indentUnit'=> 4,
+            'indentWithTabs'=> true,
+            'enterMode'=> "keep",
+            'tabMode'=> "shift",
+            'height'=>'100%',
+            'viewportMargin'=>30,
+            'autoMatchParens'=>true,
+            'lineWrapping'=>true,
+        ),
+    ));
  */
 class Codemirror extends CInputWidget
 {
