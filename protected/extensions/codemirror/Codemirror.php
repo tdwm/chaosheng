@@ -36,6 +36,7 @@ class Codemirror extends CInputWidget
     public $baseurl;
     public $model;
     public $attribute;
+    public $events;
     public $target = null;
     public $showHint = false;
     public $options = array();
@@ -184,12 +185,13 @@ class Codemirror extends CInputWidget
         
         $cs->registerScriptFile($assets . '/lib/codemirror.js');
         $cs->registerCssFile($assets . "/lib/codemirror.css");
+        $cs->registerCssFile($assets . "/addon/display/fullscreen.css");
         
         //THEMES
         $cs->registerCssFile($assets . "/theme/solarized.css");
 
         if($this->options['vimMode']) {
-            //$cs->registerScriptFile($assets . '/addon/search/searchcursor.js');
+            $cs->registerScriptFile($assets . '/addon/search/searchcursor.js');
             $cs->registerScriptFile($assets . '/keymap/vim.js');
         }
         
@@ -201,6 +203,7 @@ class Codemirror extends CInputWidget
         }
         
         $cs->registerScriptFile($assets . '/addon/edit/matchbrackets.js');
+        $cs->registerScriptFile($assets . '/addon/display/fullscreen.js');
         $cs->registerScriptFile($assets . '/mode/htmlmixed/htmlmixed.js');
         $cs->registerScriptFile($assets . '/mode/xml/xml.js');
         $cs->registerScriptFile($assets . '/mode/javascript/javascript.js');
@@ -228,6 +231,13 @@ class Codemirror extends CInputWidget
             $script = "codeMirror{$id} = CodeMirror.fromTextArea(document.getElementById('{$id}'), 
                 {$options}
             ); ";
+            if(!empty($this->events))
+            {
+                foreach($this->events as $key => $js)
+                $script .= "codeMirror{$id}.on('$key',$js)";
+                    
+            }
+            
             
             if($this->getShowHint())
             {
@@ -246,14 +256,13 @@ class Codemirror extends CInputWidget
                     $script .=" codeMirror{$id}.setOption('extraKeys', {$this->extraKeys}); ";
                 }
             }
-            
             $cs->registerScript('codemirroredit' . $id, $script, CClientScript::POS_END);
         }
         else
         {
             $cs->registerScript('codemirroredit' . $this->target, "var codemirroredit{$this->target} = CodeMirror.fromTextArea(document.getElementById('{$this->target}'), { lineNumbers: true, matchBrackets: true, mode: 'text/x-php', indentUnit: 4, indentWithTabs: true, enterMode: \"keep\", tabMode: \"shift\" });", CClientScript::POS_END);
         }
-            $cs->registerScript('codemirroredit_style' . $id, '$(".CodeMirror").css("height","100%");');
+          //  $cs->registerScript('codemirroredit_style' . $id, '$(".CodeMirror").css("height","100%");');
     }
 
 }

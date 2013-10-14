@@ -122,7 +122,11 @@ class crawlerCommand extends CConsoleCommand {
         if (!empty($list) ) {
             CollectsContent::model()->updateByPk($list['id'],array('status' => 4)); 
             $GLOBALS['downloadfiles'] = array();
-            $html = collection::get_content($list['url'], $data);
+            if ($data->contentcrawlbyfile) {
+                $html = collection::get_content_file($list['url'], $data);
+            } else {
+                $html = collection::get_content($list['url'], $data);
+            }
             //更新附件状态
             if($attach_status) {
                 //$this->attachment_db->api_update($GLOBALS['downloadfiles'],'cj-'.$v['id'],1);

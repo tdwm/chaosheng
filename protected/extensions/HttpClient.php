@@ -306,7 +306,7 @@ class HttpClient {
         $this->debug = $boolean;
     }
     // "Quick" static methods
-    function quickGet($url) {
+   static function quickGet($url) {
         $bits = parse_url($url);
         $host = $bits['host'];
         $port = isset($bits['port']) ? $bits['port'] : 80;
@@ -321,7 +321,7 @@ class HttpClient {
             return $client->getContent();
         }
     }
-    function quickPost($url, $data) {
+    static function quickPost($url, $data) {
         $bits = parse_url($url);
         $host = $bits['host'];
         $port = isset($bits['port']) ? $bits['port'] : 80;
