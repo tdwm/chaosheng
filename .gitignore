@@ -4,7 +4,6 @@
 .project
 *sublime*
 /protected/config/*
-/protected/modules/*
 /themes/*
 !/themes/default
 !/protected/modules/admin
