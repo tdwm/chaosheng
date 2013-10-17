@@ -75,6 +75,7 @@ class ApiController extends CiiController
         }
             
         $delay_time = Yii::app()->cache->get('api_'.$site_id);
+        /*
         if($delay_time) {
             $this->error_no = 50;
             $this->outPut();
@@ -82,6 +83,7 @@ class ApiController extends CiiController
             //Yii::app()->cache->add('api_'.$site_id,true,300);
             Yii::app()->cache->set('api_'.$site_id,true,300);
         }
+         */
 
         $this->site = CollectsWeb::model()->findByPk($site_id);
         if ($this->site == null) 
@@ -119,6 +121,7 @@ class ApiController extends CiiController
 
         $criteria->limit = $this->limit;
         $criteria->offset = $this->limit*$p;
+        $criteria->order = " col_id asc";
         $result = Contents::model()->findAll($criteria);
         if($result){
             $this->datas = array_map(function($record) { return $record->attributes; },$result);
@@ -172,9 +175,22 @@ class ApiController extends CiiController
             );
             return json_encode($datas);
         }
+        $data = array();
+        if(!empty($this->datas)) foreach($this->datas as $k=> $item)
+        {	        
+            $k++;
+            $data[$k]['col_id']= $item['col_id'];
+            $data[$k]['col_title']= $item['col_title'];
+            $data[$k]['col_time']= $item['col_time'];
+            $data[$k]['col_media']= $item['col_media'];
+            $data[$k]['col_category']= $item['col_category'];
+            $data[$k]['col_keywords']= $item['col_keywords'];
+            $data[$k]['col_description']= $item['col_description'];
+            $data[$k]['col_content']= $item['col_content'];
+        }
         $datas = array(
             'pages'=>$this->pageinfo,
-            'data'=>$this->datas,
+            'data'=>$data,
         );
         return json_encode($datas);
     }
