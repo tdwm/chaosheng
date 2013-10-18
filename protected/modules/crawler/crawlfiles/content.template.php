@@ -56,6 +56,16 @@ class [CLASSNAME] extends contentCrawlerAbstract
         return true;
     }
 
+    protected function getTime() {
+        $dom = $this->contentdom->find('div[id="date"]');
+        if (empty($dom)){
+            return false;
+        }
+        $time = $dom->innertext;
+        $this->data['time'] = $time;
+        return true;
+    }
+
     public function getData(){
         $ret = $this->init();
         if ($ret === false){

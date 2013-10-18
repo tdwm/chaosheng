@@ -114,12 +114,8 @@ class CollectsController extends ACiiController
         $model->customize_config = myFunc::string2array($model->customize_config );
         $json_customize = json_encode($model->customize_config) ;
 
-        if($model->contentcrawlbyfile) {
-            $crawlerContent = $model->getCrawlerFile($model->sign,'content');
-        }
-        if($model->urlcrawlbyfile) {
-            $crawlerUrl = $model->getCrawlerFile($model->sign,'url');
-        }
+        $crawlerContent = $model->getCrawlerFile($model->sign,'content');
+        $crawlerUrl = $model->getCrawlerFile($model->sign,'url');
         $this->render('create',array(
             'model'=>$model,
             'crawlerContent'=>$crawlerContent,
@@ -304,7 +300,7 @@ class CollectsController extends ACiiController
         $url = $_REQUEST['url'];
         $id = $_REQUEST['id'];
         $data = $this->loadModel($id);
-        if ($data->contentcrawlbyfile) {
+        if ($data->contentcrawlbyfile || $_REQUEST['filetest']==1) {
             $html = collection::get_content_file($url, $data);
         } else {
             $html = collection::get_content($url, $data);

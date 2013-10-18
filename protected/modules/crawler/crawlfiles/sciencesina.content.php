@@ -1,13 +1,13 @@
 <?php
 require_once('content.abstract.php');
-class wangyifinaceContent extends contentCrawlerAbstract 
+class sciencesinaContent extends contentCrawlerAbstract 
 {
 
     protected $contentdom = '';
 
     public function init()
     {
-        $dom = $this->htmldom->find('#J_Article_Wrap',0);
+        $dom = $this->htmldom->find('div[id=""]',0);
         if (empty($dom)){
             return false;
         }
@@ -26,7 +26,7 @@ class wangyifinaceContent extends contentCrawlerAbstract
     }
 
     protected function getContent() {
-        $dom = $this->contentdom->find('div[id="artibody"]',0);
+        $dom = $this->contentdom->find('div[id="content"]',0);
         if (empty($dom)){
             return false;
         }
@@ -37,7 +37,7 @@ class wangyifinaceContent extends contentCrawlerAbstract
     }
 
     protected function getCategory() {
-        $dom = $this->htmldom->find('.blkBreadcrumbLink .a02',0);
+        $dom = $this->htmldom->find('div[id="breadcrumbs"]',1);
         if (empty($dom)){
             return false;
         }
@@ -47,21 +47,12 @@ class wangyifinaceContent extends contentCrawlerAbstract
     }
 
     protected function getMedia() {
-        $dom = $this->contentdom->find('#media_name a',0);
+        $dom = $this->contentdom->find('div[id="media_name"]',0);
         if (empty($dom)){
             return false;
         }
         $media = $dom->innertext;
         $this->data['media'] = $media;
-        return true;
-    }
-	protected function getTime() {
-        $dom = $this->contentdom->find('#pub_date',0);
-        if (empty($dom)){
-            return false;
-        }
-        $time = $dom->innertext;
-        $this->data['time'] = $time;
         return true;
     }
 
@@ -72,9 +63,9 @@ class wangyifinaceContent extends contentCrawlerAbstract
         }
         $this->getKeywords();
         $this->getDescription();
+        $this->getCategory();
         $this->getMedia();
         $this->getTime();
-        $this->getCategory();
         $ret = $this->getTitle();
         if ($ret === false){
             return false;

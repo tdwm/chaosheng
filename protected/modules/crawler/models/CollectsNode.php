@@ -293,6 +293,7 @@ class CollectsNode extends CActiveRecord
     public function getCrawlerFile($sign,$file='url',$type='code')
     {
         $this->crawlerInit();
+        $this->makeCrawlerFile($sign);
         $cfile = $this->crawlFileDir.$sign.".".$file.'.php';    
         if($type == 'code'){
             return file_get_contents($cfile);

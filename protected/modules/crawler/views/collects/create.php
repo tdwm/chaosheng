@@ -30,7 +30,7 @@ Yii::app()->getClientScript()->registerScript(
 )); ?>
     <div class="span12">
 <?php $this->beginWidget('bootstrap.widgets.TbBox', array(
-    'title' => $model->isNewRecord ? '添加采集' : '修改采集',
+    'title' => $model->isNewRecord ? '添加采集' : '修改采集-'.$model->name,
     'headerIcon' => 'icon-user',
     'headerButtons' => array(
         array(
@@ -63,64 +63,10 @@ Yii::app()->getClientScript()->registerScript(
                 <?php include('_ruleUrl.php'); ?>
               </div>
               <div class="tab-pane" id="ruleContent" style="min-height:600px">
-                
-                <?php 
-                        include('_ruleContent.php');
-                ?>
+                <?php include('_ruleContent.php'); ?>
               </div>
-              <div class="tab-pane" id="ruleFile" style="min-height:600px">
-                <?php 
-                        $this->widget(
-                            'bootstrap.widgets.TbButtonGroup',
-                            array(
-                                'buttons' => array(
-                                    array('label' => '全屏', 'htmlOptions' => array(
-                                        'onclick'=>"js:codeMirrorcontentEditor.setOption('fullScreen',true); $('.CodeMirror-fullscreen').css('top','40px'); ",
-                                    )),
-                                    array('label'=>'保存', 'htmlOptions'=>array(
-                                        'onclick'=>"js: saveFileContent(); ",
-                                    )),
-                                ),
-                            )
-                        );
-                        $this->widget('ext.codemirror.Codemirror',array(
-                            'id'=>'contentEditor',
-                            'name'=>'crawlerContent',
-                            'value'=>$crawlerContent,
-                            //'showTheme' => true,
-                            'options'=>array(
-                                'lineNumbers'=> true,
-                                'matchBrackets'=> true,
-                                'showCursorWhenSelecting'=> true,
-                                'mode'=> 'text/x-php',
-                                'keyMap'=>'vim',
-                                'vimMode'=> true,
-                                'theme'=>'solarized dark',
-                                'indentUnit'=> 4,
-                                'indentWithTabs'=> true,
-                                'enterMode'=> "keep",
-                                'tabMode'=> "shift",
-                                'height'=>'100%',
-                                'autoMatchParens'=>true,
-                                'lineWrapping'=>true,
-                                //'viewportMargin'=> 'Infinity',
-                                'extraKeys'=>array(
-                                    "Esc" => 'js:function(cm) {
-                                      if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
-                                    }',
-                                ),
-                            ),
-                            'htmlOptions'=>array(
-                                'id'=>'contentEditor',
-                            ),
-                            'events'=>array(
-                                'change'=>'function(){
-                                    clearTimeout(toSave);
-                                    toSave = setTimeout(saveFileContent, 15000);
-                                }',
-                            )
-                        ));
-                ?>
+              <div class="tab-pane" id="ruleFile" style="min-height:100%">
+                <?php include('_ruleFileContent.php'); ?>
               </div>
               <div class="tab-pane" id="ruleSelf">
                 <?php include('_ruleSelf.php'); ?>
