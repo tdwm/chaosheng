@@ -5,9 +5,8 @@ $this->breadcrumbs=array(
 );
 Yii::app()->getClientScript()->registerScript(
     'toSave',
-    '
-    var toSave;
-    var saveFileContent = function(){
+    'var toSave;
+     var saveFileContent = function(){
         _data = codeMirrorcontentEditor.getValue();
         $.post("'.$this->createUrl('/crawler/collects/savecrawlerfile',array('sign'=>$model->sign,'file'=>'content')).'",
             {code:_data},
@@ -65,20 +64,20 @@ Yii::app()->getClientScript()->registerScript(
               <div class="tab-pane" id="ruleContent" style="min-height:600px">
                 
                 <?php 
-                    $this->widget(
-                        'bootstrap.widgets.TbButtonGroup',
-                        array(
-                            'buttons' => array(
-                                array('label' => '全屏', 'htmlOptions' => array(
-                                    'onclick'=>"js:codeMirrorcontentEditor.setOption('fullScreen',true); $('.CodeMirror-fullscreen').css('top','40px'); ",
-                                )),
-                                array('label'=>'保存', 'htmlOptions'=>array(
-                                    'onclick'=>"js: saveFileContent(); ",
-                                )),
-                            ),
-                        )
-                    );
                     if($model->contentcrawlbyfile) {
+                        $this->widget(
+                            'bootstrap.widgets.TbButtonGroup',
+                            array(
+                                'buttons' => array(
+                                    array('label' => '全屏', 'htmlOptions' => array(
+                                        'onclick'=>"js:codeMirrorcontentEditor.setOption('fullScreen',true); $('.CodeMirror-fullscreen').css('top','40px'); ",
+                                    )),
+                                    array('label'=>'保存', 'htmlOptions'=>array(
+                                        'onclick'=>"js: saveFileContent(); ",
+                                    )),
+                                ),
+                            )
+                        );
                         $this->widget('ext.codemirror.Codemirror',array(
                             'id'=>'contentEditor',
                             'name'=>'crawlerContent',
