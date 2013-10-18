@@ -51,6 +51,7 @@ Yii::app()->getClientScript()->registerScript(
               <li class="active"><a href="#ruleBase" data-toggle="tab" >基本设置</a></li>
               <li><a href="#ruleUrl" data-toggle="tab" >网址规则</a></li>
               <li><a href="#ruleContent" data-toggle="tab" >内容规则</a></li>
+              <li><a href="#ruleFile" data-toggle="tab" >文件内容规则</a></li>
               <li><a href="#ruleSelf" data-toggle="tab" >自定义规则</a></li>
               <li><a href="#ruleAdvance" data-toggle="tab" >高级配置</a></li>
             </ul>
@@ -64,7 +65,11 @@ Yii::app()->getClientScript()->registerScript(
               <div class="tab-pane" id="ruleContent" style="min-height:600px">
                 
                 <?php 
-                    if($model->contentcrawlbyfile) {
+                        include('_ruleContent.php');
+                ?>
+              </div>
+              <div class="tab-pane" id="ruleFile" style="min-height:600px">
+                <?php 
                         $this->widget(
                             'bootstrap.widgets.TbButtonGroup',
                             array(
@@ -115,9 +120,6 @@ Yii::app()->getClientScript()->registerScript(
                                 }',
                             )
                         ));
-                    } else {
-                        include('_ruleContent.php');
-                    }
                 ?>
               </div>
               <div class="tab-pane" id="ruleSelf">
