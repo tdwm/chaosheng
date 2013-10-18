@@ -6,7 +6,6 @@
 /protected/config/*
 /themes/*
 !/themes/default
-!/protected/modules/admin
 !/protected/modules/hybridauth
 .htaccess
 /uploads/*
