@@ -262,7 +262,7 @@ class myFunc {
        $str = preg_replace("/\n/is","",$str); 
        $str = preg_replace("/ /is","",$str);
        $str = preg_replace("/　　/","",$str);
-       $str = preg_replace("/\s/is","",$str);
+       //$str = preg_replace("/\s/is","",$str);
        $str = preg_replace("/&nbsp;/","",$str);  //匹配html中的空格
        return trim($str); 
    }
