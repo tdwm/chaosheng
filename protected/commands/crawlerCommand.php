@@ -56,8 +56,7 @@ class crawlerCommand extends CConsoleCommand {
                 //以后处理ck
                 $value = trim($data[$ck]);
                 if(array_key_exists($field,$push) ) {
-                    if ( $field != 'col_content') {
-                        if($node->contentcrawlbyfile == 0)
+                    if ( $field != 'col_content' && $node->contentcrawlbyfile == 0) {
                             $contentmodel->$field = myFunc::DeleteHtml($value);
                     } else {
                         $contentmodel->{$field} = $value;
