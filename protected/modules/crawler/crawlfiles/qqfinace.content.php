@@ -1,12 +1,13 @@
 <?php
 require_once('content.abstract.php');
-class sciencesinaContent extends contentCrawlerAbstract 
+class qqfinaceContent extends contentCrawlerAbstract 
 {
+
     protected $contentdom = '';
 
     public function init()
     {
-        $dom = $this->htmldom->find('#J_Article_Wrap',0);
+        $dom = $this->htmldom->find('div[id="C-Main-Article-QQ"]',0);
         if (empty($dom)){
             return false;
         }
@@ -25,28 +26,28 @@ class sciencesinaContent extends contentCrawlerAbstract
     }
 
     protected function getContent() {
-        $dom = $this->contentdom->find('div[id="artibody"]',0);
+        $dom = $this->contentdom->find('div[id="Cnt-Main-Article-QQ"]',0);
         if (empty($dom)){
             return false;
         }
         $content = $dom->innertext;
-        $content = trim(strip_tags($content,'<p>,<img>,<br>'));
+        $content = trim(strip_tags($content,'<p>,<img>,<br>,<style>'));
         $this->data['content'] = $content;
         return true;
     }
 
     protected function getCategory() {
-        $dom = $this->htmldom->find('.blkBreadcrumbLink .a02',0);
+        $dom = $this->htmldom->find('span[bosszone="ztTopic"]',0);
         if (empty($dom)){
             return false;
         }
-        $category = $dom->innertext;
+        $category = strip_tags($dom->innertext);
         $this->data['category'] = $category;
         return true;
     }
 
     protected function getMedia() {
-        $dom = $this->contentdom->find('#media_name',0);
+        $dom = $this->contentdom->find('span[bosszone="jgname"]',0);
         if (empty($dom)){
             return false;
         }
@@ -54,8 +55,9 @@ class sciencesinaContent extends contentCrawlerAbstract
         $this->data['media'] = $media;
         return true;
     }
-	protected function getTime() {
-        $dom = $this->contentdom->find('#pub_date',0);
+
+    protected function getTime() {
+        $dom = $this->contentdom->find('span.pubTime',0);
         if (empty($dom)){
             return false;
         }
@@ -65,28 +67,37 @@ class sciencesinaContent extends contentCrawlerAbstract
     }
 
     public function getData(){
+		$this->checkPage();
         $ret = $this->init();
         if ($ret === false){
             return false;
         }
         $this->getKeywords();
         $this->getDescription();
+        $this->getCategory();
         $this->getMedia();
         $this->getTime();
-        $this->getCategory();
         $ret = $this->getTitle();
         if ($ret === false){
-			return "false title";
+            return false;
         }
         $this->data['title'] = trim($this->data['title']);
 
         $ret = $this->getContent();
         if ($ret === false){
-			return "false content";
+            return false;
         }
         return $this->data;
     }
-
+	public function checkPage()
+	{
+		if($this->htmldom->find('#ArtPLink',0)){
+			$href = $this->htmldom->find('#ArtPLink',0)->find('li[bosszone="showAll"] a',0)->href;
+			//echo $href;exit;
+			$pagelink = $this->url_check($href,'http://finance.qq.com/');
+			$this->htmldom = file_get_html($pagelink);
+		}
+	}
     public static function getFileds()
     {
         $fileds = parent::getFileds();

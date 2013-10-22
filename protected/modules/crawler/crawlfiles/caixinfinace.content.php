@@ -1,12 +1,13 @@
 <?php
 require_once('content.abstract.php');
-class sciencesinaContent extends contentCrawlerAbstract 
+class caixinfinaceContent extends contentCrawlerAbstract 
 {
+
     protected $contentdom = '';
 
     public function init()
     {
-        $dom = $this->htmldom->find('#J_Article_Wrap',0);
+        $dom = $this->htmldom->find('div[id="the_content"]',0);
         if (empty($dom)){
             return false;
         }
@@ -16,16 +17,16 @@ class sciencesinaContent extends contentCrawlerAbstract
     }
 
     protected function getTitle() {
-        $dom = $this->contentdom->find('h1',0);
+        $dom = $this->htmldom->find('h1',0);
         if (empty($dom)){
             return false;
         }
-        $this->data['title'] = $this->contentdom->find('h1',0)->plaintext;
+        $this->data['title'] = $dom->plaintext;
         return true;
     }
 
     protected function getContent() {
-        $dom = $this->contentdom->find('div[id="artibody"]',0);
+        $dom = $this->contentdom->find('#Main_Content_Val',0);
         if (empty($dom)){
             return false;
         }
@@ -36,31 +37,33 @@ class sciencesinaContent extends contentCrawlerAbstract
     }
 
     protected function getCategory() {
-        $dom = $this->htmldom->find('.blkBreadcrumbLink .a02',0);
+        $dom = $this->htmldom->find('title',0);
         if (empty($dom)){
             return false;
         }
-        $category = $dom->innertext;
+		$temp = explode('_',$dom->innertext);
+        $category = $temp[1];
         $this->data['category'] = $category;
         return true;
     }
 
     protected function getMedia() {
-        $dom = $this->contentdom->find('#media_name',0);
+        $dom = $this->htmldom->find('#artInfo',0)->find('a',0);
         if (empty($dom)){
             return false;
         }
-        $media = strip_tags($dom->innertext);
+        $media = $dom->innertext;
         $this->data['media'] = $media;
         return true;
     }
-	protected function getTime() {
-        $dom = $this->contentdom->find('#pub_date',0);
+
+    protected function getTime() {
+        $dom = $this->htmldom->find('#artInfo',0);
         if (empty($dom)){
             return false;
         }
-        $time = $dom->innertext;
-        $this->data['time'] = $time;
+        $time = mb_substr(trim(strip_tags($dom->plaintext)),0,25);
+        $this->data['time'] = trim($time);
         return true;
     }
 
@@ -71,18 +74,18 @@ class sciencesinaContent extends contentCrawlerAbstract
         }
         $this->getKeywords();
         $this->getDescription();
+        $this->getCategory();
         $this->getMedia();
         $this->getTime();
-        $this->getCategory();
         $ret = $this->getTitle();
         if ($ret === false){
-			return "false title";
+            return false;
         }
         $this->data['title'] = trim($this->data['title']);
 
         $ret = $this->getContent();
         if ($ret === false){
-			return "false content";
+            return false;
         }
         return $this->data;
     }

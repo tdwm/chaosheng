@@ -1,12 +1,13 @@
 <?php
 require_once('content.abstract.php');
-class sciencesinaContent extends contentCrawlerAbstract 
+class hexunallContent extends contentCrawlerAbstract 
 {
+
     protected $contentdom = '';
 
     public function init()
     {
-        $dom = $this->htmldom->find('#J_Article_Wrap',0);
+        $dom = $this->htmldom->find('div.text_panel',0);
         if (empty($dom)){
             return false;
         }
@@ -29,14 +30,19 @@ class sciencesinaContent extends contentCrawlerAbstract
         if (empty($dom)){
             return false;
         }
-        $content = $dom->innertext;
+		$content = '';
+		foreach($dom->find('p') as $p ){
+			if($p->align) continue;
+			$content .= $p->outertext;
+		}
+        //$content = $dom->innertext;
         $content = trim(strip_tags($content,'<p>,<img>,<br>'));
         $this->data['content'] = $content;
         return true;
     }
 
     protected function getCategory() {
-        $dom = $this->htmldom->find('.blkBreadcrumbLink .a02',0);
+        $dom = $this->htmldom->find('div[id="page_navigation"] a',1);
         if (empty($dom)){
             return false;
         }
@@ -46,16 +52,17 @@ class sciencesinaContent extends contentCrawlerAbstract
     }
 
     protected function getMedia() {
-        $dom = $this->contentdom->find('#media_name',0);
+        $dom = $this->contentdom->find('#artibodyDesc a',0);
         if (empty($dom)){
             return false;
         }
-        $media = strip_tags($dom->innertext);
+        $media = $dom->innertext;
         $this->data['media'] = $media;
         return true;
     }
-	protected function getTime() {
-        $dom = $this->contentdom->find('#pub_date',0);
+
+    protected function getTime() {
+        $dom = $this->contentdom->find('#artibodyDesc .gray',0);
         if (empty($dom)){
             return false;
         }
@@ -71,18 +78,18 @@ class sciencesinaContent extends contentCrawlerAbstract
         }
         $this->getKeywords();
         $this->getDescription();
+        $this->getCategory();
         $this->getMedia();
         $this->getTime();
-        $this->getCategory();
         $ret = $this->getTitle();
         if ($ret === false){
-			return "false title";
+            return false;
         }
         $this->data['title'] = trim($this->data['title']);
 
         $ret = $this->getContent();
         if ($ret === false){
-			return "false content";
+            return false;
         }
         return $this->data;
     }

@@ -50,6 +50,7 @@ class sinafinaceContent extends contentCrawlerAbstract
             return false;
         $media = $dom->innertext;
         $media = strip_tags($media);
+	   $media = preg_replace("/&nbsp;/","",$media); 
         $this->data['media'] = $media;
         return true;
     }
@@ -59,6 +60,7 @@ class sinafinaceContent extends contentCrawlerAbstract
             return false;
         }
         $time = $dom->innertext;
+		$time = preg_replace("/&nbsp;/","",$time); 
         $this->data['time'] = $time;
         return true;
     }
