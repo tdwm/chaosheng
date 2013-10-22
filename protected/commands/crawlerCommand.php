@@ -25,9 +25,16 @@ class crawlerCommand extends CConsoleCommand {
             ));
         //根据program id全部导入
         }else{
+            /*
             $colcontents = CollectsContent::model()->findAll("nodeid = :nodeid and status = :status",array(
                 ':nodeid'=>$program->nodeid,':status'=>1
             ));
+             */
+            $colcontents = CollectsContent::model()->findAll(array(
+                'condition'=>"nodeid = :nodeid and status = :status",
+                'params'=>array( ':nodeid'=>$program->nodeid,':status'=>1),
+                'order'=>'id desc',
+                ));
         }
 
         $model = $this->getContentModel($program->catid);
