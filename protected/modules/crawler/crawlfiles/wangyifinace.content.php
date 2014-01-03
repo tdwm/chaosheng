@@ -7,7 +7,7 @@ class wangyifinaceContent extends contentCrawlerAbstract
 
     public function init()
     {
-        $dom = $this->htmldom->find('#J_Article_Wrap',0);
+        $dom = $this->htmldom->find('.ep-content-main',0);
         if (empty($dom)){
             return false;
         }
@@ -26,18 +26,25 @@ class wangyifinaceContent extends contentCrawlerAbstract
     }
 
     protected function getContent() {
-        $dom = $this->contentdom->find('div[id="artibody"]',0);
+        $dom = $this->contentdom->find('div[id="endText"]',0);
         if (empty($dom)){
             return false;
         }
-        $content = $dom->innertext;
-        $content = trim(strip_tags($content,'<p>,<img>,<br>'));
+		$dom->find('div.ep-source',0)->innertext = '';
+		$content = '';
+		//$dom->find('div')->innertext = null;
+		foreach($dom->find('p') as $p)
+		{
+			$p->style = "TEXT-INDENT: 2em";
+			$content .= $p->outertext;
+		}
+        $content = trim(strip_tags($content,'<p>,<img>,<br>,<b>'));
         $this->data['content'] = $content;
         return true;
     }
 
     protected function getCategory() {
-        $dom = $this->htmldom->find('.blkBreadcrumbLink .a02',0);
+        $dom = $this->htmldom->find('span.ep-crumb a',2);
         if (empty($dom)){
             return false;
         }
@@ -47,20 +54,25 @@ class wangyifinaceContent extends contentCrawlerAbstract
     }
 
     protected function getMedia() {
-        $dom = $this->contentdom->find('#media_name a',0);
+        $dom = $this->contentdom->find('.ep-info a',0);
         if (empty($dom)){
             return false;
         }
         $media = $dom->innertext;
-        $this->data['media'] = $media;
+		$replace = array(
+			'(www.wind.com.cn)',
+			'www.gemag.com.cn',
+		);
+		$media = str_replace($replace,'',$media);
+        $this->data['media'] = trim($media);
         return true;
     }
 	protected function getTime() {
-        $dom = $this->contentdom->find('#pub_date',0);
+        $dom = $this->contentdom->find('.ep-info',0);
         if (empty($dom)){
             return false;
         }
-        $time = $dom->innertext;
+	   $time = mb_substr(trim(strip_tags(trim($dom->innertext))),0,22);
         $this->data['time'] = $time;
         return true;
     }

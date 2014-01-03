@@ -124,7 +124,10 @@ class ApiController extends CiiController
         $criteria->order = " col_id asc";
         $result = Contents::model()->findAll($criteria);
         if($result){
-            $this->datas = array_map(function($record) { return $record->attributes; },$result);
+            foreach($result as $v){
+             $this->datas[]  = $v->attributes;
+            }
+            //$this->datas = array_map(function($record) { return $record->attributes; },$result);
         }
 
         $this->outPut();
@@ -140,7 +143,10 @@ class ApiController extends CiiController
         $criteria->addCondition('site_id = '.$this->site->id);
         $criteria->addCondition('status = 1');
         $result = CollectsAllot::model()->findAll($criteria);
-        $category = array_map(function($record) { return $record->attributes; },$result);
+        foreach($result as $v){
+            $category[] = $v->attributes;
+        }
+        //$category = array_map(function($record) { return $record->attributes; },$result);
 
         //检查用户所分配的分类
         $cid_in = array();
